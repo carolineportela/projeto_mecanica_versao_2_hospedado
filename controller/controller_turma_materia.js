@@ -112,6 +112,7 @@ const getTurmaMateria = async function () {
         return message.ERROR_NOT_FOUND
     }
 }
+
 const getTurmaMateriaID = async function (id) {
 
     if(id == '' || id == undefined || isNaN(id)) {
@@ -132,10 +133,42 @@ const getTurmaMateriaID = async function (id) {
     }
 }
 
+const inserirDadosTurmaMateriaProcedore = async function (dados) {
+
+    let resultDados;
+
+    if (
+        dados.materia_nome == '' || dados.materia_nome == undefined || 
+        dados.materia_sigla  == '' || dados.materia_sigla == undefined ||
+        dados.turma_id == '' || dados.turma_id == undefined   
+    ) {
+        return message.ERROR_INTERNAL_SERVER
+    } else {
+
+        resultDados = await turmaMateriaDAO.insertTurmaMateriaComProcedore(dados)
+
+        if (resultDados) {
+
+            //Chama a função que vai encontrar o ID gerado após o insert
+            let novoDado = await turmaMateriaDAO.selectLastId()
+
+            let dadosJSON = {};
+            dadosJSON.status = message.SUCESS_CREATED_ITEM.status;
+            dadosJSON.message = message.SUCESS_CREATED_ITEM.message;
+            dadosJSON.dados = novoDado
+            
+            return dadosJSON
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
 module.exports = {
     inserirTurmaMateria,
     atualizarTurmaMateria,
     deletarTurmaMateria,
     getTurmaMateria,
-    getTurmaMateriaID
+    getTurmaMateriaID,
+    inserirDadosTurmaMateriaProcedore
 }

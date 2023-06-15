@@ -206,7 +206,7 @@ const inserirDadosProcidore = async function (dados) {
         dados.carga_horaria_curso == '' || dados.carga_horaria_curso == undefined 
     ) {
         console.log(dados);
-        return message.ERROR_REQUIRE_FIELDS
+        return message.ERROR_INTERNAL_SERVER
     } else {
 
         resultDados = await turmaDAO.insertDaTurmaComProcidore(dados)

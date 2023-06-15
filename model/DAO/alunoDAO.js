@@ -136,7 +136,26 @@ const selectAlunosByIDTurma = async function (idTurma) {
 
 }
 
+//Inserindo o aluno com store de procedore
+const insertDoAlunoProcedore = async function (dados) {
 
+    let sql = ` CALL criar_aluno_e_matricula (
+            '${dados.nome_aluno}',
+            '${dados.data_nascimento}',
+            '${dados.email_aluno}',
+            '${dados.numero_matricula}',
+            ${dados.id_turma},
+            ${dados.id_usuario}
+            );`
+
+    let rs = await prisma.$queryRawUnsafe(sql);
+
+    if (rs) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 const selectLastId = async function () {
     let sql = `select * from tbl_aluno order by id desc limit 1;`
@@ -158,5 +177,6 @@ module.exports = {
     selectAlunoByID,
     selectLastId,
     selectByNameAluno,
-    selectAlunosByIDTurma
+    selectAlunosByIDTurma,
+    insertDoAlunoProcedore
 }

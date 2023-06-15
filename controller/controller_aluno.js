@@ -183,6 +183,39 @@ const getAlunosIDTurma = async (idTurma) => {
     }
 }
 
+const inserirAlunoProcedore = async function (dados) {
+
+    let resultDados;
+
+    if (dados.nome_aluno == '' || dados.nome_aluno == undefined ||
+        dados.data_nascimento == '' || dados.data_nascimento == undefined || 
+        dados.email_aluno  == '' || dados.email_aluno == undefined ||
+        dados.numero_matricula == '' || dados.numero_matricula == undefined ||
+        dados.id_turma == '' || dados.id_turma == undefined ||
+        dados.id_usuario == '' || dados.id_usuario == undefined 
+    ) {
+        return message.ERROR_INTERNAL_SERVER
+    } else {
+
+        resultDados = await alunoDAO.insertDoAlunoProcedore(dados)
+
+        if (resultDados) {
+
+            //Chama a função que vai encontrar o ID gerado após o insert
+            let novoDado = await alunoDAO.selectLastId()
+
+            let dadosJSON = {};
+            dadosJSON.status = message.SUCESS_CREATED_ITEM.status;
+            dadosJSON.message = message.SUCESS_CREATED_ITEM.message;
+            dadosJSON.aluno = novoDado
+            
+            return dadosJSON
+        } else {
+            return message.ERROR_INTERNAL_SERVER
+        }
+    }
+}
+
 
 module.exports = {
     inserirAluno,
@@ -191,5 +224,6 @@ module.exports = {
     getAlunos,
     getAlunoPorID,
     getBuscarAlunoNome,
-    getAlunosIDTurma
+    getAlunosIDTurma,
+    inserirAlunoProcedore
 }

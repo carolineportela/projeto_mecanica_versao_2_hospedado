@@ -2217,10 +2217,9 @@ app.get('/v1/mecanica/registro/tempo/tarefa/idTarefa/:idTarefa', cors(), bodyPar
     response.json(dados)
 
 });
-
 //////////////////////////Procidore //////////////////////////////
 
-//EndPoint: Post - Insere a turma com  o metodo procidore
+//EndPoint: Post - Insere a turma com  o metodo procedore,salvando o id do curso automaticamente na tabela da turma.
 app.post('/v1/mecanica/turma/procidore', cors(), bodyParserJSON, async function (request, response) {
 
     let contentType = request.headers['content-type']
@@ -2238,6 +2237,47 @@ app.post('/v1/mecanica/turma/procidore', cors(), bodyParserJSON, async function 
     }
 
 });
+
+
+//EndPoint: Post - Procedore da tabela intermediaria turma_materia
+app.post('/v1/mecanica/turma/materia/procedore', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let resulDados = await controllerTurmaMateria.inserirDadosTurmaMateriaProcedore(dadosBody)
+
+        response.status(resulDados.status)
+        response.json(resulDados)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+});
+
+
+//EndPoint: Post - Procedore entre a tabela aluno e matricula
+app.post('/v1/mecanica/aluno/matricula/procedore', cors(), bodyParserJSON, async function (request, response) {
+
+    let contentType = request.headers['content-type']
+
+    if (String(contentType).toLowerCase() == 'application/json') {
+        let dadosBody = request.body
+
+        let resulDados = await controllerAluno.inserirAlunoProcedore(dadosBody)
+
+        response.status(resulDados.status)
+        response.json(resulDados)
+    } else {
+        response.status(message.ERROR_INVALID_CONTENT_TYPE.status)
+        response.json(message.ERROR_INVALID_CONTENT_TYPE)
+    }
+
+});
+
 
 
 app.listen(8080, function () {

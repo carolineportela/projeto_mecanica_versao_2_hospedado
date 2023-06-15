@@ -86,6 +86,25 @@ const selectTurmaMateriaByID = async function (id) {
         return false;
     }
 }
+
+const insertTurmaMateriaComProcedore = async function (dados) {
+
+    let sql = ` CALL insert_turma_materia (
+            '${dados.materia_nome}',
+            '${dados.materia_sigla}',
+             ${dados.turma_id}
+
+            );`
+
+    let rs = await prisma.$queryRawUnsafe(sql);
+
+    if (rs) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 const selectLastId = async function() {
     let sql = `select * from tbl_turma_materia order by id desc limit 1;`
 
@@ -103,5 +122,6 @@ module.exports = {
     insertTurmaMateria,
     deleteTurmaMateria,
     selectLastId,
-    updateTurmaMateria
+    updateTurmaMateria,
+    insertTurmaMateriaComProcedore
 }
